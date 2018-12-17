@@ -8,6 +8,13 @@ def print_list(sim):
 	for st in sim:
 		print (st)
 
+def het_calc(chrom1,chrom2,length):
+	count=0
+	for pos in range(0,length-1):
+		if chrom1[pos]!=chrom2[pos]:
+			count=count+1
+	return count
+
 
 #setting parameters
 
@@ -16,6 +23,7 @@ gen_time=8
 T=20
 mu=10e-3
 rho=0
+sim_length=5
 
 population_configurations = [
 	msprime.PopulationConfiguration(
@@ -59,16 +67,24 @@ demographic_events=[
 ]
 
 def bison_sim():
-	tree_sequence=msprime.simulate(Ne=Ne,length=5,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations,
+	tree_sequence=msprime.simulate(Ne=Ne,length=sim_length,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations,
 		demographic_events=demographic_events,samples=samples)
 #	print(tree_sequence.genotype_matrix())
 	haplotypes=tree_sequence.haplotypes()
 	haplotype_list=[]
 	for i in haplotypes:
 				haplotype_list.append(i)
-	haplotype_list.append(tree_sequence.get_num_mutations())
+#	haplotype_list.append(tree_sequence.get_num_mutations())
+	polymorph=tree_sequence.get_num_mutations()
 	sim=haplotype_list
 	print_list(sim)
+	print(" ")
+#	print(sim[0][0])
+#	print(sim[1])
+	print(polymorph)
+	print(het_calc(sim[0],sim[1],length=polymorph)/sim_length)
+	print(" ")
+
 
 
 
