@@ -2,13 +2,20 @@ import msprime
 import numpy as np
 import random
 
+#functions
+
+def print_list(sim):
+	for st in sim:
+		print (st)
+
+
 #setting parameters
 
-Ne=100000
+Ne=10
 gen_time=8
 T=20
-mu=2e-8
-rho=10e-8
+mu=10e-3
+rho=0
 
 population_configurations = [
 	msprime.PopulationConfiguration(
@@ -16,14 +23,14 @@ population_configurations = [
 	msprime.PopulationConfiguration(
 		initial_size=Ne),
 	msprime.PopulationConfiguration(
-		initial_size=Ne,
+		initial_size=Ne),
 	msprime.PopulationConfiguration(
 		initial_size=Ne),
 	msprime.PopulationConfiguration(
 		initial_size=Ne),
 	]
 
-ancient_samples = [
+samples = [
 	msprime.Sample(population=0,time=0),
 	msprime.Sample(population=0,time=0),
 
@@ -42,20 +49,30 @@ ancient_samples = [
 
 demographic_events=[
 	msprime.MassMigration(
-		time=T,source=1,destination=0,proportion=1),
+		time=T,source=0,destination=4,proportion=1),
 	msprime.MassMigration(
-		time=T,source=2,destination=0,proportion=1),
+		time=T,source=1,destination=4,proportion=1),
 	msprime.MassMigration(
-		time=T,source=3,destination=0,proportion=1),
+		time=T,source=2,destination=4,proportion=1),
 	msprime.MassMigration(
-		time=T,source=4,destination=0,proportion=1),
+		time=T,source=3,destination=4,proportion=1),
 ]
 
 def bison_sim():
-	tree_sequence=msprime.simulate(Ne=Ne,length=10,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations
-		samples=ancient_samples)
+	tree_sequence=msprime.simulate(Ne=Ne,length=5,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations,
+		demographic_events=demographic_events,samples=samples)
+#	print(tree_sequence.genotype_matrix())
+	haplotypes=tree_sequence.haplotypes()
+	haplotype_list=[]
+	for i in haplotypes:
+				haplotype_list.append(i)
+	haplotype_list.append(tree_sequence.get_num_mutations())
+	sim=haplotype_list
+	print_list(sim)
 
 
+
+bison_sim()
 
 
 ########
