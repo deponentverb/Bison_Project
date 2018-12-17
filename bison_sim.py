@@ -1,6 +1,7 @@
 import msprime
 import numpy as np
 import random
+import sys
 
 #functions
 
@@ -24,6 +25,8 @@ T=20
 mu=10e-3
 rho=0
 sim_length=5
+demes=5
+
 
 population_configurations = [
 	msprime.PopulationConfiguration(
@@ -38,22 +41,12 @@ population_configurations = [
 		initial_size=Ne),
 	]
 
-samples = [
-	msprime.Sample(population=0,time=0),
-	msprime.Sample(population=0,time=0),
 
-	msprime.Sample(population=1,time=0),
-	msprime.Sample(population=1,time=0),
 
-	msprime.Sample(population=2,time=0),
-	msprime.Sample(population=2,time=0),
-
-	msprime.Sample(population=3,time=0),
-	msprime.Sample(population=3,time=0),
-
-	msprime.Sample(population=4,time=0),
-	msprime.Sample(population=4,time=0),
-]
+samples = list()
+for i in range(5):
+	for j in range(20):
+		samples.append(msprime.Sample(population=i,time=0))
 
 demographic_events=[
 	msprime.MassMigration(
@@ -82,7 +75,9 @@ def bison_sim():
 #	print(sim[0][0])
 #	print(sim[1])
 	print(polymorph)
-	print(het_calc(sim[0],sim[1],length=polymorph)/sim_length)
+	inbred_het=het_calc(sim[0],sim[1],length=polymorph)/sim_length
+	outbred_het=het_calc(sim[0],sim[2],length=polymorph)/sim_length
+	print(inbred_het,outbred_het)
 	print(" ")
 
 
