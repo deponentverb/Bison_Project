@@ -27,6 +27,7 @@ rho=1e-8
 sim_length=1e7
 demes=5
 num_samples=20
+num_sim=1000
 
 
 population_configurations = [
@@ -61,28 +62,30 @@ demographic_events=[
 ]
 
 def bison_sim():
-	print("inbred_het","outbred_het", "num_polymorph")
-	tree_sequence=msprime.simulate(Ne=Ne,length=sim_length,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations,
-		demographic_events=demographic_events,samples=samples)
-#	print(tree_sequence.genotype_matrix())
-	haplotypes=tree_sequence.haplotypes()
-	haplotype_list=[]
-	for i in haplotypes:
-				haplotype_list.append(i)
-#	haplotype_list.append(tree_sequence.get_num_mutations())
-	polymorph=tree_sequence.get_num_mutations()
-	sim=haplotype_list
-#	print_list(sim)
-#	print(" ")
-#	print(sim[0][0])
-#	print(sim[1])
-#	print(polymorph)
-	random_chrom1=random.randint(1,demes*num_samples-1)
-	random_chrom2=random.randint(1,demes*num_samples-1)
-	inbred_het=het_calc(sim[0],sim[1],length=polymorph)/sim_length
-	outbred_het=het_calc(sim[random_chrom1],sim[random_chrom2],length=polymorph)/sim_length
-	print(inbred_het,outbred_het,polymorph)
-#	print(" ")
+	print("class","het", "num_polymorph")
+	for i in range (num_sim):
+		tree_sequence=msprime.simulate(Ne=Ne,length=sim_length,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations,
+			demographic_events=demographic_events,samples=samples)
+	#	print(tree_sequence.genotype_matrix())
+		haplotypes=tree_sequence.haplotypes()
+		haplotype_list=[]
+		for i in haplotypes:
+					haplotype_list.append(i)
+	#	haplotype_list.append(tree_sequence.get_num_mutations())
+		polymorph=tree_sequence.get_num_mutations()
+		sim=haplotype_list
+	#	print_list(sim)
+	#	print(" ")
+	#	print(sim[0][0])
+	#	print(sim[1])
+	#	print(polymorph)
+		random_chrom1=random.randint(1,demes*num_samples-1)
+		random_chrom2=random.randint(1,demes*num_samples-1)
+		inbred_het=het_calc(sim[0],sim[1],length=polymorph)/sim_length
+		outbred_het=het_calc(sim[random_chrom1],sim[random_chrom2],length=polymorph)/sim_length
+		print("inbred",inbred_het,polymorph)
+		print("outbred",outbred_het,polymorph)
+	#	print(" ")
 
 
 
