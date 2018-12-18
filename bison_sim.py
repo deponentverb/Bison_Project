@@ -19,26 +19,27 @@ def het_calc(chrom1,chrom2,length):
 
 #setting parameters
 
-Ne=10000
+Ne=100000
 gen_time=8
-T=20
+T=50
 mu=2e-8
 rho=1e-8
 sim_length=1e7
 demes=5
 num_samples=20
 num_sim=1000
+bottleneck=20
 
 
 population_configurations = [
 	msprime.PopulationConfiguration(
-		initial_size=Ne),
+		initial_size=bottleneck),
 	msprime.PopulationConfiguration(
-		initial_size=Ne),
+		initial_size=bottleneck),
 	msprime.PopulationConfiguration(
-		initial_size=Ne),
+		initial_size=bottleneck),
 	msprime.PopulationConfiguration(
-		initial_size=Ne),
+		initial_size=bottleneck),
 	msprime.PopulationConfiguration(
 		initial_size=Ne),
 	]
@@ -79,8 +80,10 @@ def bison_sim():
 	#	print(sim[0][0])
 	#	print(sim[1])
 	#	print(polymorph)
-		random_chrom1=random.randint(1,demes*num_samples-1)
-		random_chrom2=random.randint(1,demes*num_samples-1)
+		random_chrom1=random.randint(1,demes*num_samples-num_samples-1)
+		random_chrom2=random.randint(1,demes*num_samples-num_samples-1)
+		while(random_chrom2==random_chrom1):
+			random_chrom2=randint(1,demes*num_samples-num_samples-1)
 		inbred_het=het_calc(sim[0],sim[1],length=polymorph)/sim_length
 		outbred_het=het_calc(sim[random_chrom1],sim[random_chrom2],length=polymorph)/sim_length
 		print("inbred",inbred_het,polymorph)
