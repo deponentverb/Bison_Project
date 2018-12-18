@@ -83,7 +83,7 @@ def bison_sim():
 		random_chrom1=random.randint(1,demes*num_samples-num_samples-1)
 		random_chrom2=random.randint(1,demes*num_samples-num_samples-1)
 		while(random_chrom2==random_chrom1):
-			random_chrom2=randint(1,demes*num_samples-num_samples-1)
+			random_chrom2=random.randint(1,demes*num_samples-num_samples-1)
 		inbred_het=het_calc(sim[0],sim[1],length=polymorph)/sim_length
 		outbred_het=het_calc(sim[random_chrom1],sim[random_chrom2],length=polymorph)/sim_length
 		print("inbred",inbred_het,polymorph)
