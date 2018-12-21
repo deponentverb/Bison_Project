@@ -29,7 +29,7 @@ def pair_wise_het (start,end,chrom_list):
 
 
 #setting parameters
-"""
+#"""
 Ne=100000
 gen_time=8
 mu=2e-8
@@ -55,7 +55,7 @@ demes=5
 num_samples=2
 num_sim=10
 bottleneck_size=[5,20,50,200]
-#"""
+"""
 
 def pop_config(bottleneck_size,Ne):
 	population_configurations = [
