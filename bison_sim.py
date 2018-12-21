@@ -9,27 +9,53 @@ def print_list(sim):
 	for st in sim:
 		print (st)
 
-def het_calc(chrom1,chrom2,length):
+def het_calc(chrom1,chrom2):
 	count=0
+	length=len(chrom1)
+	if len(chrom1)!= len(chrom2):
+		print ("error")
 	for pos in range(0,length-1):
 		if chrom1[pos]!=chrom2[pos]:
 			count=count+1
 	return count
+
+#obtain the average pairwise het between haplotypes a to b
+def pair_wise_het (start,end,chrom_list):
+	count=0
+	for i in range (start,end):
+		count=count+het_calc(chrom_list[start],chrom_list[start+i],)
+
+
 
 
 #setting parameters
 
 Ne=100000
 gen_time=8
-T=50
 mu=2e-8
 rho=1e-8
-sim_length=1e7
+sim_length=1.5e8
 demes=5
 num_samples=20
-num_sim=1000
-bottleneck=20
+num_sim=100
+bottleneck_size=20
+bottleneck_length=50
 
+
+"""
+#testing parameters
+
+Ne=10
+gen_time=8
+T=50
+mu=1e-2
+rho=0
+sim_length=2
+demes=5
+num_samples=2
+num_sim=10
+bottleneck=20
+"""
 
 population_configurations = [
 	msprime.PopulationConfiguration(
@@ -80,12 +106,13 @@ def bison_sim():
 	#	print(sim[0][0])
 	#	print(sim[1])
 	#	print(polymorph)
-		random_chrom1=random.randint(1,demes*num_samples-num_samples-1)
-		random_chrom2=random.randint(1,demes*num_samples-num_samples-1)
+	#	print(len(sim[1]))
+		random_chrom1=random.randint(1,demes*(num_samples-1)-1)
+		random_chrom2=random.randint(1,demes*(num_samples-1)-1)
 		while(random_chrom2==random_chrom1):
 			random_chrom2=random.randint(1,demes*num_samples-num_samples-1)
-		inbred_het=het_calc(sim[0],sim[1],length=polymorph)/sim_length
-		outbred_het=het_calc(sim[random_chrom1],sim[random_chrom2],length=polymorph)/sim_length
+		inbred_het=het_calc(sim[0],sim[1])/sim_length
+		outbred_het=het_calc(sim[random_chrom1],sim[random_chrom2])/sim_length
 		print("inbred",inbred_het,polymorph)
 		print("outbred",outbred_het,polymorph)
 	#	print(" ")
