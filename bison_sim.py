@@ -54,7 +54,7 @@ sim_length=2
 demes=5
 num_samples=2
 num_sim=10
-bottleneck_size=20
+bottleneck_size=[5,20,50,200]
 #"""
 
 def pop_config(bottleneck_size,Ne):
@@ -93,9 +93,13 @@ def demo_events(bottleneck_length):
 	return demographic_events
 
 def bison_sim(bottleneck_size,bottleneck_length,Ne):
-	print("class","het", "num_polymorph")
+	#print("class","het", "num_polymorph")
 	population_configurations=pop_config(bottleneck_size,Ne)
 	demographic_events=demo_events(bottleneck_length)
+	name=str(bottleneck_size)+"_"+str(bottleneck_length)
+	#print(name)
+	file=open(name,'w')
+	file.write("class het num_polymorph"+"\n")
 	for i in range (num_sim):
 		tree_sequence=msprime.simulate(Ne=Ne,length=sim_length,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations,
 			demographic_events=demographic_events,samples=samples)
@@ -119,15 +123,25 @@ def bison_sim(bottleneck_size,bottleneck_length,Ne):
 			random_chrom2=random.randint(1,demes*num_samples-num_samples-1)
 		inbred_het=het_calc(sim[0],sim[1])/sim_length
 		outbred_het=het_calc(sim[random_chrom1],sim[random_chrom2])/sim_length
-		print("inbred",inbred_het,polymorph)
-		print("outbred",outbred_het,polymorph)
+		file.write("inbred"+" "+ str(inbred_het)+" "+str(polymorph)+"\n")
+		file.write("outbred"+" "+ str(outbred_het)+" "+str(polymorph)+"\n")
+	#	print("inbred",inbred_het,polymorph)
+	#	print("outbred",outbred_het,polymorph)
 	#	print(" ")
+	file.close()
+
+for i in range(len(bottleneck_size)):
+#	print (bottleneck_size[i])
+	bison_sim(bottleneck_size=bottleneck_size[i],bottleneck_length=bottleneck_length,Ne=Ne)
+
+"""
+
+for i in bottleneck_size:
+	bison_sim(bottleneck_size=bottleneck_size[i],bottleneck_length=bottleneck_length,Ne=Ne)
+"""
 
 
 
 
-bison_sim(bottleneck_size=bottleneck_size,bottleneck_length=bottleneck_length,Ne=Ne)
 
-
-########
 
