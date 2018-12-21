@@ -39,8 +39,7 @@ demes=5
 num_samples=20
 num_sim=100
 bottleneck_size=20
-bottleneck_length=50
-
+bottleneck_size=[5,20,50,200]
 
 """
 #testing parameters
