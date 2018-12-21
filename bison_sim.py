@@ -29,7 +29,7 @@ def pair_wise_het (start,end,chrom_list):
 
 
 #setting parameters
-
+"""
 Ne=100000
 gen_time=8
 mu=2e-8
@@ -47,28 +47,30 @@ bottleneck_length=50
 
 Ne=10
 gen_time=8
-T=50
+bottleneck_length=50
 mu=1e-2
 rho=0
 sim_length=2
 demes=5
 num_samples=2
 num_sim=10
-bottleneck=20
-"""
+bottleneck_size=20
+#"""
 
-population_configurations = [
-	msprime.PopulationConfiguration(
-		initial_size=bottleneck),
-	msprime.PopulationConfiguration(
-		initial_size=bottleneck),
-	msprime.PopulationConfiguration(
-		initial_size=bottleneck),
-	msprime.PopulationConfiguration(
-		initial_size=bottleneck),
-	msprime.PopulationConfiguration(
-		initial_size=Ne),
-	]
+def pop_config(bottleneck_size,Ne):
+	population_configurations = [
+		msprime.PopulationConfiguration(
+			initial_size=bottleneck_size),
+		msprime.PopulationConfiguration(
+			initial_size=bottleneck_size),
+		msprime.PopulationConfiguration(
+			initial_size=bottleneck_size),
+		msprime.PopulationConfiguration(
+			initial_size=bottleneck_size),
+		msprime.PopulationConfiguration(
+			initial_size=Ne),
+		]
+	return population_configurations
 
 
 
@@ -77,19 +79,23 @@ for i in range(demes):
 	for j in range(num_samples):
 		samples.append(msprime.Sample(population=i,time=0))
 
-demographic_events=[
-	msprime.MassMigration(
-		time=T,source=0,destination=4,proportion=1),
-	msprime.MassMigration(
-		time=T,source=1,destination=4,proportion=1),
-	msprime.MassMigration(
-		time=T,source=2,destination=4,proportion=1),
-	msprime.MassMigration(
-		time=T,source=3,destination=4,proportion=1),
-]
+def demo_events(bottleneck_length):
+	demographic_events=[
+		msprime.MassMigration(
+			time=bottleneck_length,source=0,destination=4,proportion=1),
+		msprime.MassMigration(
+			time=bottleneck_length,source=1,destination=4,proportion=1),
+		msprime.MassMigration(
+			time=bottleneck_length,source=2,destination=4,proportion=1),
+		msprime.MassMigration(
+			time=bottleneck_length,source=3,destination=4,proportion=1),
+	]
+	return demographic_events
 
-def bison_sim():
+def bison_sim(bottleneck_size,bottleneck_length,Ne):
 	print("class","het", "num_polymorph")
+	population_configurations=pop_config(bottleneck_size,Ne)
+	demographic_events=demo_events(bottleneck_length)
 	for i in range (num_sim):
 		tree_sequence=msprime.simulate(Ne=Ne,length=sim_length,recombination_rate=rho,mutation_rate=mu,population_configurations=population_configurations,
 			demographic_events=demographic_events,samples=samples)
@@ -120,7 +126,7 @@ def bison_sim():
 
 
 
-bison_sim()
+bison_sim(bottleneck_size=bottleneck_size,bottleneck_length=bottleneck_length,Ne=Ne)
 
 
 ########
